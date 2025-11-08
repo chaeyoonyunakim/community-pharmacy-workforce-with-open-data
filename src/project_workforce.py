@@ -13,6 +13,7 @@ from config import (
     SCENARIOS
 )
 from input_data import load_registrants_data
+from utils import add_financial_year_column
 
 
 def load_registration_data(data_dir=None):
@@ -121,7 +122,7 @@ def project_workforce(rates, years=None, scenarios=None):
 
 
 def format_projections(projections):
-    """Format projections into DataFrames for easy export."""
+    """Format projections into DataFrames with financial year column."""
     formatted = {}
     
     for profession, scenarios in projections.items():
@@ -136,7 +137,10 @@ def format_projections(projections):
                     'scenario': scenario_name
                 })
         
-        formatted[profession] = pd.DataFrame(rows)
+        df = pd.DataFrame(rows)
+        # Add financial year column
+        df = add_financial_year_column(df)
+        formatted[profession] = df
     
     return formatted
 
