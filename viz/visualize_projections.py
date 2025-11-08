@@ -23,6 +23,7 @@ from project_workforce import (
     project_workforce,
     format_projections
 )
+from utils import calendar_to_financial_year
 
 
 def create_visualizations(output_dir=None):
@@ -49,6 +50,7 @@ def create_visualizations(output_dir=None):
     projections_df = format_projections(projections)
     
     # Combine all profession dataframes into one
+    # Financial year column is already included from format_projections
     df = pd.concat(projections_df.values(), ignore_index=True)
     
     # Get unique professions dynamically
@@ -57,10 +59,12 @@ def create_visualizations(output_dir=None):
     
     # Create figure with subplots (one per profession)
     end_year = START_PROJECTION_YEAR + PROJECTION_YEARS
+    start_fy = calendar_to_financial_year(START_PROJECTION_YEAR)
+    end_fy = calendar_to_financial_year(end_year)
     fig, axes = plt.subplots(num_professions, 1, figsize=(12, 6 * num_professions))
     if num_professions == 1:
         axes = [axes]  # Make it iterable if only one profession
-    fig.suptitle(f'{PROJECTION_YEARS}-Year Workforce Projection ({START_PROJECTION_YEAR}-{end_year})', 
+    fig.suptitle(f'{PROJECTION_YEARS}-Year Workforce Projection ({start_fy} to {end_fy})', 
                  fontsize=16, fontweight='bold')
     
     scenarios = ['baseline', 'optimistic', 'pessimistic']
@@ -71,16 +75,24 @@ def create_visualizations(output_dir=None):
         ax = axes[idx]
         for scenario in scenarios:
             data = df[(df['profession'] == profession) & (df['scenario'] == scenario)]
+            # Use year for plotting position, but financial_year for labels
             ax.plot(data['year'], data['total_registrants'], 
                     marker='o', label=scenario.capitalize(), 
                     color=colors[scenario], linewidth=2, markersize=4)
         
+        # Set x-axis labels to financial years
         ax.set_title(f'{profession} Workforce Projection', fontsize=12, fontweight='bold')
-        ax.set_xlabel('Year')
+        ax.set_xlabel('Financial Year')
         ax.set_ylabel('Number of Registrants')
         ax.legend()
         ax.grid(True, alpha=0.3)
         ax.set_xlim(START_PROJECTION_YEAR - 1, end_year + 1)
+        
+        # Set x-axis ticks and labels to financial years
+        tick_positions = range(START_PROJECTION_YEAR, end_year + 1)
+        tick_labels = [calendar_to_financial_year(year) for year in tick_positions]
+        ax.set_xticks(tick_positions)
+        ax.set_xticklabels(tick_labels, rotation=45, ha='right')
     
     plt.tight_layout()
     
@@ -103,13 +115,19 @@ def create_visualizations(output_dir=None):
             ax.plot(data['year'], data['total_registrants'], 
                    marker='o', label=label, linewidth=2, markersize=3, linestyle=linestyle)
     
-    ax.set_title(f'{PROJECTION_YEARS}-Year Workforce Projection: All Professions and Scenarios', 
+    ax.set_title(f'{PROJECTION_YEARS}-Year Workforce Projection: All Professions and Scenarios ({start_fy} to {end_fy})', 
                  fontsize=14, fontweight='bold')
-    ax.set_xlabel('Year')
+    ax.set_xlabel('Financial Year')
     ax.set_ylabel('Number of Registrants')
     ax.legend(loc='upper left', fontsize=9)
     ax.grid(True, alpha=0.3)
     ax.set_xlim(START_PROJECTION_YEAR - 1, end_year + 1)
+    
+    # Set x-axis ticks and labels to financial years
+    tick_positions = range(START_PROJECTION_YEAR, end_year + 1)
+    tick_labels = [calendar_to_financial_year(year) for year in tick_positions]
+    ax.set_xticks(tick_positions)
+    ax.set_xticklabels(tick_labels, rotation=45, ha='right')
     
     plt.tight_layout()
     
