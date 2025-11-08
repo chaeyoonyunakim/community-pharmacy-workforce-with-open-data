@@ -3,5 +3,5 @@ This workforce projection model supports NHS workforce planning for community ph
 
 Data sources
 - [GPhC registers data](https://www.pharmacyregulation.org/about-us/publications-and-insights/research-data-and-insights/gphc-registers-data)
-    - actuals: September 2025
-    - estimates: March and June 2025 registrant counts are derived by applying monthly average rates to the 9-month joiners/leavers totals (through September 2025), with March representing 3 months of change and June representing 6 months of change.
+    - actuals: April 2025 onwards
+    - estimates: For the financial year 2024/25, the registrant counts are derived by applying monthly average rates during the current financial year 2025/26 data on joiners/leavers totals.
