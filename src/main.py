@@ -48,7 +48,7 @@ def main():
     projections_df = format_projections(projections)
     
     print("\n✅ Projection complete!")
-    create_visualizations(projections_df)
+    create_visualizations(projections_df, baseline_source='cpws')
 
 if __name__ == '__main__':
     main()

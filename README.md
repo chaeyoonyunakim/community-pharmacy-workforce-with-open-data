@@ -35,10 +35,29 @@ community-pharmacy-workforce-with-open-data/
     - **Snapshot data**: Annual snapshot data (March) for England from 2018 to 2025
     - **Growth rates**: Compound Annual Growth Rate (CAGR) calculated from 7-year historical data (2018-2025)
 
-## Output
+### Example Output
 
 The model generates workforce projections and visualizations:
 
 ![Workforce Projection Chart](workforce_projection_chart.png)
 
 The visualization shows 10-year projections for both Pharmacist and Pharmacy Technician professions across three scenarios (baseline, optimistic, pessimistic) based on CPWS baseline data and GPhC growth rates.
+
+```
+============================================================
+Baseline and Annual Growth Rates (CAGR)
+============================================================
+Growth Rate Calculation Period: 7 year(s) (2018-2025)
+Projection Period: 10 years
+Note: Annual Growth Rate = Compound Annual Growth Rate (CAGR)
+
+Pharmacist:
+  Baseline: 18,926.58922
+  CAGR (Average Annual Growth Rate): 2.80%
+  Annual Change Estimate: 1,399 registrants/year
+Pharmacy Technician:
+  Baseline: 4,290.735455
+  CAGR (Average Annual Growth Rate): 2.00%
+  Annual Change Estimate: 414 registrants/year
+============================================================
+```
