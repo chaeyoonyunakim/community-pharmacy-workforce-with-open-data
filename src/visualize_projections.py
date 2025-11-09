@@ -34,7 +34,7 @@ def create_visualizations(gap_analysis_df, baseline_source='cpws', output_dir=No
     start_fy = calendar_to_financial_year(config.START_PROJECTION_YEAR)
     end_fy = calendar_to_financial_year(end_year)
     
-    fig, ax = config.plt.subplots(1, 1, figsize=(14, 6))
+    fig, ax1 = config.plt.subplots(1, 1, figsize=(14, 6))
     
     fig.suptitle(f'{config.DURATION}-Year Workforce Supply vs Operations Projection - England ({start_fy} to {end_fy})', 
                  fontsize=16, fontweight='bold')
@@ -57,36 +57,46 @@ def create_visualizations(gap_analysis_df, baseline_source='cpws', output_dir=No
     if len(unique_scenarios) > 1:
         raise ValueError(f"Expected single scenario in gap_analysis_df, but found: {unique_scenarios}")
     
-    # Plot supply and ops lines
-    ax.plot(scenario_data['year'], scenario_data['supply'], 
+    # Left y-axis: Supply and Ops lines
+    ax1.plot(scenario_data['year'], scenario_data['supply'], 
             marker='o', label='Supply (Total FTE)', 
             color=supply_color, linewidth=2.5, markersize=5, linestyle='-')
-    ax.plot(scenario_data['year'], scenario_data['ops'], 
+    ax1.plot(scenario_data['year'], scenario_data['ops'], 
             marker='s', label='Operations (FTE)', 
             color=ops_color, linewidth=2.5, markersize=5, linestyle='--')
     
-    # Add gap as bar chart
-    ax.bar(scenario_data['year'], scenario_data['gap'], 
+    # Set left y-axis labels
+    y_label = 'FTE' if baseline_source.lower() == 'cpws' else 'Number of Registrants'
+    ax1.set_ylabel(y_label, fontsize=10, color='black')
+    ax1.tick_params(axis='y', labelcolor='black')
+    ax1.grid(True, alpha=0.3)
+    ax1.set_xlim(config.START_PROJECTION_YEAR - 1, end_year + 1)
+    
+    # Right y-axis: Gap bars
+    ax2 = ax1.twinx()
+    ax2.bar(scenario_data['year'], scenario_data['gap'], 
            label='Gap (Supply - Ops)', 
            color=gap_color, alpha=0.6, width=0.6)
     
-    # Add zero line for gap reference
-    ax.axhline(y=0, color='gray', linestyle='-', linewidth=0.5, alpha=0.5)
+    # Add zero line for gap reference on right axis
+    ax2.axhline(y=0, color='gray', linestyle='-', linewidth=0.5, alpha=0.5)
+    ax2.set_ylabel('Gap (FTE)', fontsize=10, color=gap_color)
+    ax2.tick_params(axis='y', labelcolor=gap_color)
     
     # Set labels and title
-    ax.set_title(f'{scenario_name.capitalize()} Scenario', fontsize=12, fontweight='bold')
-    ax.set_xlabel('Financial Year', fontsize=10)
-    y_label = 'FTE' if baseline_source.lower() == 'cpws' else 'Number of Registrants'
-    ax.set_ylabel(y_label, fontsize=10)
-    ax.legend(loc='best', fontsize=9)
-    ax.grid(True, alpha=0.3)
-    ax.set_xlim(config.START_PROJECTION_YEAR - 1, end_year + 1)
+    ax1.set_title(f'{scenario_name.capitalize()} Scenario', fontsize=12, fontweight='bold')
+    ax1.set_xlabel('Financial Year', fontsize=10)
+    
+    # Combine legends from both axes
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc='best', fontsize=9)
     
     # Set x-axis ticks and labels to financial years
     tick_positions = range(config.START_PROJECTION_YEAR, end_year + 1)
     tick_labels = [calendar_to_financial_year(year) for year in tick_positions]
-    ax.set_xticks(tick_positions)
-    ax.set_xticklabels(tick_labels, rotation=45, ha='right')
+    ax1.set_xticks(tick_positions)
+    ax1.set_xticklabels(tick_labels, rotation=45, ha='right')
     
     config.plt.tight_layout()
     

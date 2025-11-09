@@ -30,4 +30,4 @@ UTILISATION_RATE = 0.7586
 FTE_WEEKLY_HOURS = 40
 
 # Pharmacy operations growth rate
-OPS_GROWTH_RATE_PCT = 0.1  # 0.1% annual growth rate for pharmacy operations
+OPS_GROWTH_RATE = 0.04  # 4%

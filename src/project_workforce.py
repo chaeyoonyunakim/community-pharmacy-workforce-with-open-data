@@ -106,7 +106,7 @@ def project_pharmacy_ops(baseline_ops_fte, duration=config.DURATION):
     """
     Project pharmacy operations FTE over specified years based on baseline and fixed growth rate.
     
-    Uses the provided baseline workforce operation FTE and applies a fixed annual growth rate (0.1%)
+    Uses the provided baseline workforce operation FTE and applies a fixed annual growth rate (4%)
     to project future operations FTE requirements.
     
     Args:
@@ -116,8 +116,8 @@ def project_pharmacy_ops(baseline_ops_fte, duration=config.DURATION):
     Returns:
         dict: Projections by scenario with baseline and projected values
     """
-    # Use fixed growth rate from config
-    growth_rate_pct = config.OPS_GROWTH_RATE_PCT
+    # Use fixed growth rate from config (already in decimal form, e.g., 0.04 = 4%)
+    growth_rate_pct = config.OPS_GROWTH_RATE * 100  # Convert to percentage for projection function
     
     # Use same scenario creation as supply projections
     # Pass empty dict to get default scenarios (baseline: 1.0, optimistic: 1.2, pessimistic: 0.8)
