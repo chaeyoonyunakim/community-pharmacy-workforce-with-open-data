@@ -9,12 +9,13 @@ import config
 from utils import calendar_to_financial_year
 
 
-def create_visualizations(projections_df, output_dir=None):
+def create_visualizations(projections_df, baseline_source='cpws', output_dir=None):
     """
     Create visualization charts for projections.
     
     Args:
         projections_df: Dictionary of DataFrames from format_projections() with projections by profession
+        baseline_source: Baseline data source ('cpws' or 'gphc'). Default is 'cpws'.
         output_dir: Optional output directory path. If None, uses project root.
     """
     # Default to project root
@@ -61,7 +62,9 @@ def create_visualizations(projections_df, output_dir=None):
         # Set x-axis labels to financial years
         ax.set_title(f'{profession} Workforce Projection - England', fontsize=12, fontweight='bold')
         ax.set_xlabel('Financial Year')
-        ax.set_ylabel('Number of Registrants')
+        # Use FTE label if baseline source is CPWS, otherwise use Registrants
+        y_label = 'Number of Registrants (FTE)' if baseline_source.lower() == 'cpws' else 'Number of Registrants'
+        ax.set_ylabel(y_label)
         ax.legend()
         ax.grid(True, alpha=0.3)
         ax.set_xlim(config.START_PROJECTION_YEAR - 1, end_year + 1)
