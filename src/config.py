@@ -15,5 +15,5 @@ from utils import calendar_to_financial_year
 CURRENT_FINANCIAL_YEAR = calendar_to_financial_year(BASELINE_YEAR)  # 2025/26
 
 # Projection parameters
-PROJECTION_YEARS = 10  # Number of years to project forward
+DURATION = 10  # Number of years to project forward
 START_PROJECTION_YEAR = 2025  # Year to start projections from

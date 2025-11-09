@@ -8,7 +8,7 @@ for England only.
 
 import pandas as pd
 from config import (
-    PROJECTION_YEARS, START_PROJECTION_YEAR
+    DURATION, START_PROJECTION_YEAR
 )
 from input_data import (
     load_registrants_data,
@@ -23,7 +23,7 @@ def load_registration_data(data_dir=None):
     return load_registrants_data(data_dir)
 
 
-def project_workforce(rates, years=None, scenarios=None):
+def project_workforce(rates, duration=DURATION):
     """
     Project workforce over specified years based on Compound Annual Growth Rate (CAGR).
     
@@ -32,15 +32,12 @@ def project_workforce(rates, years=None, scenarios=None):
     
     Args:
         rates: Dictionary from calculate_annual_growth_rates() with CAGR data
-        years: Number of years to project (default: from config)
-        scenarios: dict with scenario names and rate adjustments (default: calculated from rates)
-                  e.g., {'baseline': 1.0, 'optimistic': 1.2, 'pessimistic': 0.8}
+        duration: Number of years to project (default: DURATION from config)
+    
+    Returns:
+        dict: Projections by profession and scenario
     """
-    if years is None:
-        years = PROJECTION_YEARS
-    if scenarios is None:
-        # Calculate scenarios dynamically from growth rates
-        scenarios = create_scenarios(rates)
+    scenarios = create_scenarios(rates)
     
     projections = {}
     
@@ -55,7 +52,7 @@ def project_workforce(rates, years=None, scenarios=None):
             current_total = rate_data['baseline_total']
             projection = []
             
-            for year in range(years + 1):
+            for year in range(duration + 1):
                 if year == 0:
                     projection.append({
                         'year': START_PROJECTION_YEAR + year,
@@ -65,12 +62,13 @@ def project_workforce(rates, years=None, scenarios=None):
                     })
                 else:
                     # Apply compound annual growth rate
-                    change = current_total * (adjusted_growth_rate / 100)
-                    current_total = current_total + change
+                    # Keep precision to 5 decimal places during calculation
+                    change = round(current_total * (adjusted_growth_rate / 100), 5)
+                    current_total = round(current_total + change, 5)
                     projection.append({
                         'year': START_PROJECTION_YEAR + year,
-                        'total': round(current_total),
-                        'change': round(change),
+                        'total': current_total,
+                        'change': change,
                         'scenario': scenario_name
                     })
             
@@ -80,7 +78,11 @@ def project_workforce(rates, years=None, scenarios=None):
 
 
 def format_projections(projections):
-    """Format projections into DataFrames with financial year column."""
+    """
+    Format projections into DataFrames with financial year column.
+    
+    Converts calculated values (5 decimal precision) to integers for display.
+    """
     formatted = {}
     
     for profession, scenarios in projections.items():
@@ -90,8 +92,8 @@ def format_projections(projections):
                 rows.append({
                     'profession': profession,
                     'year': point['year'],
-                    'total_registrants': point['total'],
-                    'annual_change': point['change'],
+                    'total_registrants': int(round(point['total'])),
+                    'annual_change': int(round(point['change'])),
                     'scenario': scenario_name
                 })
         

@@ -8,7 +8,7 @@ Usage:
     python main.py
 """
 
-from config import PROJECTION_YEARS, BASELINE_YEAR
+from config import DURATION, BASELINE_YEAR
 from project_workforce import (
     load_registration_data,
     calculate_annual_growth_rates,
@@ -26,7 +26,7 @@ def main():
     print("Baseline and Annual Growth Rates (CAGR)")
     print("="*60)
     print(f"Growth Rate Calculation Period: {list(rates.values())[0]['years_elapsed']} year(s) (2018-2025)")
-    print(f"Projection Period: {PROJECTION_YEARS} years")
+    print(f"Projection Period: {DURATION} years")
     print("Note: Annual Growth Rate = Compound Annual Growth Rate (CAGR)")
     print()
     for profession, rate_data in rates.items():
@@ -36,8 +36,8 @@ def main():
         print(f"  Annual Change Estimate: {rate_data['annual_change_estimate']:,.0f} registrants/year")
     print("="*60 + "\n")
     
-    print(f"Creating {PROJECTION_YEARS}-year projections...")
-    projections = project_workforce(rates, years=PROJECTION_YEARS)
+    print(f"Creating {DURATION}-year projections...")
+    projections = project_workforce(rates)
     
     print("Formatting projections...")
     projections_df = format_projections(projections)
