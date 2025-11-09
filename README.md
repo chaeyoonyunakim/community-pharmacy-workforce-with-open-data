@@ -1,6 +1,18 @@
 # community-pharmacy-workforce-with-open-data
 This workforce projection model supports NHS workforce planning for community pharmacy services, with a focus on two GPhC-regulated professions: pharmacists and pharmacy technicians.
 
+**Usage:**
+```bash
+# Run with default baseline scenario
+python src/main.py
+
+# Run with optimistic scenario
+python src/main.py optimistic
+
+# Run with pessimistic scenario
+python src/main.py pessimistic
+```
+
 ## Folder Structure
 
 ```
@@ -9,7 +21,8 @@ community-pharmacy-workforce-with-open-data/
 │   ├── cpws.py
 │   ├── gphc-total-number-of-pharmacy-registrants.csv
 │   ├── gphc-registrants-joiners.csv
-│   └── gphc-registrants-leavers.csv
+│   ├── gphc-registrants-leavers.csv
+│   └── nhsbsa-pharmacy-england-hrs.py
 ├── src/                           # Source code
 │   ├── config.py                 # Configuration settings
 │   ├── input_data.py              # Data loading and preprocessing
@@ -25,6 +38,7 @@ community-pharmacy-workforce-with-open-data/
 ```
 
 ## Data sources
+
 - Baseline: [Community Pharmacy Workforce Survey (CPWS)](https://www.data.gov.uk/dataset/09aa8f38-547a-46b7-a117-2cb710ad939b/)
     - **Unit**: Both Headcount and Full-time equivalent (FTE) figures are available
     - **Care setting**: High-street pharmacies only
@@ -44,27 +58,26 @@ community-pharmacy-workforce-with-open-data/
 
 ### Example Output
 
-The model generates workforce projections and visualizations:
+The model generates workforce projections and gap analysis visualizations:
 
 ![Workforce Projection Chart](workforce_projection_chart.png)
 
-The visualization shows 10-year projections for both Pharmacist and Pharmacy Technician professions across three scenarios (baseline, optimistic, pessimistic) based on CPWS baseline data and GPhC growth rates.
+The visualization shows 10-year supply vs operations projections with gap analysis for the selected scenario. The chart displays:
+- **Supply (Total FTE)**: Combined workforce supply (Pharmacist + Pharmacy Technician) as a line
+- **Operations (FTE)**: Workforce required for pharmacy operations as a line
+- **Gap (Supply - Ops)**: Difference between supply and operations as bars (positive = surplus, negative = deficit)
 
 ```
-============================================================
-Baseline and Annual Growth Rates (CAGR)
-============================================================
-Growth Rate Calculation Period: 7 year(s) (2018-2025)
-Projection Period: 10 years
-Note: Annual Growth Rate = Compound Annual Growth Rate (CAGR)
-
-Pharmacist:
-  Baseline: 18,926.58922
-  CAGR (Average Annual Growth Rate): 2.80%
-  Annual Change Estimate: 1,399 registrants/year
-Pharmacy Technician:
-  Baseline: 4,290.735455
-  CAGR (Average Annual Growth Rate): 2.00%
-  Annual Change Estimate: 414 registrants/year
-============================================================
+    year financial_year  scenario  supply    ops    gap
+0   2025        2025/26  baseline   23218  16914   6304
+1   2026        2026/27  baseline   23834  16931   6903
+2   2027        2027/28  baseline   24465  16948   7517
+3   2028        2028/29  baseline   25114  16965   8149
+4   2029        2029/30  baseline   25781  16982   8799
+5   2030        2030/31  baseline   26466  16999   9467
+6   2031        2031/32  baseline   27169  17016  10153
+7   2032        2032/33  baseline   27892  17033  10859
+8   2033        2033/34  baseline   28633  17050  11583
+9   2034        2034/35  baseline   29395  17067  12328
+10  2035        2035/36  baseline   30176  17084  13092
 ```
