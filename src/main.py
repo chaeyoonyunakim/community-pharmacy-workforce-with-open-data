@@ -16,6 +16,7 @@ from project_workforce import (
     project_workforce,
     format_projections
 )
+from visualize_projections import create_visualizations
 
 
 def main():
@@ -44,12 +45,10 @@ def main():
     
     print(f"Creating {config.DURATION}-year projections...")
     projections = project_workforce(baseline, growth_rates)
-    
-    print("Formatting projections...")
     projections_df = format_projections(projections)
     
     print("\n✅ Projection complete!")
-
+    create_visualizations(projections_df)
 
 if __name__ == '__main__':
     main()

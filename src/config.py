@@ -8,6 +8,7 @@ Define baseline period and projection parameters here.
 import sys
 from pathlib import Path
 import pandas as pd
+import matplotlib.pyplot as plt
 from utils import calendar_to_financial_year
 
 # Baseline period configuration

@@ -12,16 +12,13 @@ community-pharmacy-workforce-with-open-data/
 │   └── gphc-registrants-leavers.csv
 ├── src/                           # Source code
 │   ├── config.py                 # Configuration settings
-│   ├── input-data.py             # Data loading and preprocessing
-│   ├── main.py                   # Main entry point for projections
+│   ├── input_data.py              # Data loading and preprocessing
+│   ├── main.py                    # Main entry point for projections
 │   ├── project_workforce.py      # Workforce projection functions
-│   └── utils.py                  # Utility functions
-├── viz/                           # Visualization
-│   ├── plot.py                   # Entry point for visualizations
-│   ├── visualize-projections.py   # Visualization functions
-│   ├── workforce_projection_chart.png
-│   └── workforce_projection_combined.png
+│   ├── utils.py                   # Utility functions
+│   └── visualize_projections.py   # Visualization functions
 ├── LICENSE
+├── workforce_projection_chart.png # Generated visualization output
 ├── README.md
 └── requirements.txt
 
@@ -37,3 +34,11 @@ community-pharmacy-workforce-with-open-data/
     - **Care setting**: All (Hospital, Community, Primary care, and Pharmacy sector)
     - **Snapshot data**: Annual snapshot data (March) for England from 2018 to 2025
     - **Growth rates**: Compound Annual Growth Rate (CAGR) calculated from 7-year historical data (2018-2025)
+
+## Output
+
+The model generates workforce projections and visualizations:
+
+![Workforce Projection Chart](workforce_projection_chart.png)
+
+The visualization shows 10-year projections for both Pharmacist and Pharmacy Technician professions across three scenarios (baseline, optimistic, pessimistic) based on CPWS baseline data and GPhC growth rates.
