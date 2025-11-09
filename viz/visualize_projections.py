@@ -19,10 +19,10 @@ sys.path.insert(0, str(src_dir))
 from config import PROJECTION_YEARS, START_PROJECTION_YEAR
 from project_workforce import (
     load_registration_data,
-    calculate_annual_growth_rates,
     project_workforce,
     format_projections
 )
+from input_data import calculate_annual_growth_rates
 from utils import calendar_to_financial_year
 
 
